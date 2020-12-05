@@ -1,21 +1,32 @@
-const { Collection, User } = require('./Services/')
-
+const { User } = require('./Services/')
 const { populateDatabase } = require('./createUsers')
 
-// Add two test users
+// Add two test users (simulates Database peristance)
 populateDatabase()
 
-// Using Imported Collection Service
-// console.log(Collection.readUsers())
-// console.log(User.readUser('James27'))
+// User module has numerous methods available to it
 const James = User.readUser('James27')
-// console.log(James)
-User.createHabit()
-// console.log(User.getAllHabits(James))
 
-// I want to be able to read one user
-// User
+// Create habit 'Workout'
+User.createHabit('James27', {
+    name: 'Workout',
+    frequency: null,
+    goal: null
+})
 
+// Create habit 'Drink Water'
+User.createHabit('James27', {
+    name: 'Drink Water',
+    frequency: null,
+    goal: null
+})
 
+// Retrieve all User habits | create expression;
+const allJamesHabits = User.getAllHabits(James)
+console.log('allJamesHabits => ', allJamesHabits)
 
+// Read single habit 'Workout' from user James obj | create expression
+const jamesWorkOutHabit = User.readHabit(James, 'Workout');
+console.log('James Workout Habit => ', jamesWorkOutHabit);
 
+// console.log(User.readUser('James27ed'));

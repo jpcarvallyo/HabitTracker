@@ -1,18 +1,35 @@
+const { readUser } = require('../../../ReadUser/')
+const { habitValidator } = require('../HabitValidator/')
 
-const { Data } = require('../../../../../Data/') // Need the Data 
-const { getDataFromMap } = require('../../../../../Utils/') // Pull in Destructure Map Util method
+// Creates Habit for specified User
+const createHabit = (userID, habit) => {
+  // Validate the habit passed in with habitValidator
+  const habitObj = habitValidator(habit)
+  const { name } = habitObj; // Destructure Obj | pull out name property and place in variable
 
-
-
-// take user HABITS map and add a new HABIT
-
-// TODO you need to create the data structure MODEL for the Habit
-
-const createHabit = (user, habit) => {
-  // Need userID (where is the user object coming from)
-  // getDataFromMap 
   // TODO: Need a valid user service
-  console.log("CREATE HABIT")
+  // in meantime just user readUser
+
+  // Read User from Read User service
+  const userObj = readUser(userID);
+  if (userObj && habitObj) { // If userObj and habitObj is valid
+    // Retrieve userHabits from Map obj
+    const habitsMap = userObj.get('habits');
+
+    // Check if habitsMap has the habit
+    if (!habitsMap.has(name)) { // if habit is NOT there then ADD it
+      // Set obj to Map with name string
+      habitsMap.set(name, habitObj)
+      // Assign habitObj a unique ID
+      habitObj.guid = name + Math.round(Math.random() * 1000)
+
+      return habitsMap.get(name) // Return newly created habit to user
+    } else { // habit IS there so retrieve and return to user
+      return habitsMap.get(name)
+    }
+  } else {
+    return `No user found`
+  }
 }
 
 module.exports = {
